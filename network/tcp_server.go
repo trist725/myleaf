@@ -99,6 +99,7 @@ func (server *TCPServer) run() {
 		tcpConn := newTCPConn(conn, server.PendingWriteNum, server.msgParser)
 		agent := server.NewAgent(tcpConn)
 		go func() {
+			log.Debug("new connection: %s", conn.RemoteAddr().String())
 			agent.Run()
 
 			// cleanup

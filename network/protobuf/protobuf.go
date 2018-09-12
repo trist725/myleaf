@@ -62,6 +62,7 @@ func (p *Processor) Register(msg proto.Message) uint16 {
 	i := new(MsgInfo)
 	i.msgType = msgType
 	p.msgInfo = append(p.msgInfo, i)
+	//某些情况可能导致id重复，如热更时
 	id := uint16(len(p.msgInfo) - 1)
 	p.msgID[msgType] = id
 	return id
