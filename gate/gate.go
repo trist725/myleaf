@@ -1,12 +1,13 @@
 package gate
 
 import (
-	"github.com/trist725/myleaf/chanrpc"
-	"github.com/trist725/myleaf/log"
-	"github.com/trist725/myleaf/network"
 	"net"
 	"reflect"
 	"time"
+
+	"github.com/trist725/myleaf/chanrpc"
+	"github.com/trist725/myleaf/log"
+	"github.com/trist725/myleaf/network"
 )
 
 type Gate struct {
@@ -26,6 +27,8 @@ type Gate struct {
 	TCPAddr      string
 	LenMsgLen    int
 	LittleEndian bool
+
+	Mode int
 }
 
 func (gate *Gate) Run(closeSig chan bool) {
@@ -42,7 +45,14 @@ func (gate *Gate) Run(closeSig chan bool) {
 		wsServer.NewAgent = func(conn *network.WSConn) network.Agent {
 			a := &agent{conn: conn, gate: gate}
 			if gate.AgentChanRPC != nil {
-				gate.AgentChanRPC.Go("NewAgent", a)
+				switch gate.Mode {
+				case 1:
+					gate.AgentChanRPC.Go("NewClient", a)
+				case 2:
+					gate.AgentChanRPC.Go("NewServer", a)
+				default:
+					gate.AgentChanRPC.Go("NewAgent", a)
+				}
 			}
 			return a
 		}
@@ -60,7 +70,14 @@ func (gate *Gate) Run(closeSig chan bool) {
 		tcpServer.NewAgent = func(conn *network.TCPConn) network.Agent {
 			a := &agent{conn: conn, gate: gate}
 			if gate.AgentChanRPC != nil {
-				gate.AgentChanRPC.Go("NewAgent", a)
+				switch gate.Mode {
+				case 1:
+					gate.AgentChanRPC.Go("NewClient", a)
+				case 2:
+					gate.AgentChanRPC.Go("NewServer", a)
+				default:
+					gate.AgentChanRPC.Go("NewAgent", a)
+				}
 			}
 			return a
 		}
