@@ -131,7 +131,15 @@ func (a *agent) Run() {
 
 func (a *agent) OnClose() {
 	if a.gate.AgentChanRPC != nil {
-		err := a.gate.AgentChanRPC.Call0("CloseAgent", a)
+		var err error
+		switch a.gate.Mode {
+		case 1:
+			err = a.gate.AgentChanRPC.Call0("CloseClient", a)
+		case 2:
+			err = a.gate.AgentChanRPC.Call0("CloseServer", a)
+		default:
+			err = a.gate.AgentChanRPC.Call0("CloseAgent", a)
+		}
 		if err != nil {
 			log.Error("chanrpc error: %v", err)
 		}
