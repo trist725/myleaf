@@ -63,3 +63,7 @@ func (p *ServerProcessor) Marshal(msg interface{}) ([][]byte, error) {
 	}
 	return msgByte, nil
 }
+
+func (p *ServerProcessor) ClientID() int32 {
+	return p.clientID
+}
