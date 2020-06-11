@@ -35,9 +35,8 @@ func (p *ServerProcessor) SetDefaultRouter(msgRouter *chanrpc.Server) {
 
 // goroutine safe
 func (p *ServerProcessor) Route(msg interface{}, userData interface{}) error {
-	msgByte := msg.([]byte)
 	if p.defaultRouter != nil {
-		p.defaultRouter.Go("ServerForward", msgByte[:4], userData, p.clientID)
+		p.defaultRouter.Go("ServerForward", msg, userData, p.clientID)
 	}
 
 	return nil
@@ -53,7 +52,7 @@ func (p *ServerProcessor) Unmarshal(data []byte) (interface{}, error) {
 	} else {
 		p.clientID = int32(binary.BigEndian.Uint32(data[:4]))
 	}
-	return data, nil
+	return data[4:], nil
 }
 
 // goroutine safe
