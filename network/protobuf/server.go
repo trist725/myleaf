@@ -14,6 +14,8 @@ type ServerProcessor struct {
 	littleEndian bool
 	//默认做转发的router
 	defaultRouter *chanrpc.Server
+	//暂存客户端ID
+	clientID int32
 }
 
 func NewServerProcessor() *ServerProcessor {
@@ -34,15 +36,8 @@ func (p *ServerProcessor) SetDefaultRouter(msgRouter *chanrpc.Server) {
 // goroutine safe
 func (p *ServerProcessor) Route(msg interface{}, userData interface{}) error {
 	msgByte := msg.([]byte)
-	var clientID int32
-	if p.littleEndian {
-		clientID = int32(binary.LittleEndian.Uint32(msgByte[:4]))
-	} else {
-		clientID = int32(binary.BigEndian.Uint32(msgByte[:4]))
-	}
-
 	if p.defaultRouter != nil {
-		p.defaultRouter.Go("ServerForward", msgByte[:4], userData, clientID)
+		p.defaultRouter.Go("ServerForward", msgByte[:4], userData, p.clientID)
 	}
 
 	return nil
@@ -53,14 +48,19 @@ func (p *ServerProcessor) Unmarshal(data []byte) (interface{}, error) {
 	if len(data) < 2 {
 		return nil, errors.New("protobuf data too short")
 	}
+	if p.littleEndian {
+		p.clientID = int32(binary.LittleEndian.Uint32(data[:4]))
+	} else {
+		p.clientID = int32(binary.BigEndian.Uint32(data[:4]))
+	}
 	return data, nil
 }
 
 // goroutine safe
 func (p *ServerProcessor) Marshal(msg interface{}) ([][]byte, error) {
-	msgByte := msg.([]byte)
+	msgByte := msg.([][]byte)
 	if len(msgByte) < 2 {
 		return nil, errors.New("protobuf data too short")
 	}
-	return [][]byte{msgByte[:4], msgByte[4 : 4+2], msgByte[4+2:]}, nil
+	return msgByte, nil
 }
