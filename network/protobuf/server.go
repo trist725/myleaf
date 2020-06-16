@@ -45,11 +45,11 @@ func (p *ServerProcessor) Route(msg interface{}, userData interface{}) error {
 			msgByte := msg.([]byte)
 			var cmdType uint16
 			if p.littleEndian {
-				cmdType = binary.LittleEndian.Uint16(msgByte[4 : 4+2])
+				cmdType = binary.LittleEndian.Uint16(msgByte[0:2])
 			} else {
-				cmdType = binary.BigEndian.Uint16(msgByte[4 : 4+2])
+				cmdType = binary.BigEndian.Uint16(msgByte[0:2])
 			}
-			p.defaultRouter.Go("ServerCommand", msgByte[4+2:], userData, cmdType)
+			p.defaultRouter.Go("ServerCommand", msgByte[2:], userData, cmdType)
 		default:
 			p.defaultRouter.Go("ServerForward", msg, userData, p.clientID)
 		}
