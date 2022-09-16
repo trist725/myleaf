@@ -3,6 +3,7 @@ package log
 import (
 	"errors"
 	"fmt"
+	"github.com/trist725/mgsu/util"
 	"log"
 	"os"
 	"path"
@@ -61,6 +62,7 @@ func New(strLevel string, pathname string, flag int) (*Logger, error) {
 			now.Minute(),
 			now.Second())
 
+		util.MustMkdirIfNotExist(pathname)
 		file, err := os.Create(path.Join(pathname, filename))
 		if err != nil {
 			return nil, err
