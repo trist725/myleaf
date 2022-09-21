@@ -7,6 +7,7 @@ var (
 	LogLevel string
 	LogPath  string
 	LogFlag  int
+	MsgLog   = true // 收发消息日志开关
 
 	// console
 	ConsolePort   int
@@ -18,3 +19,7 @@ var (
 	ConnAddrs       []string
 	PendingWriteNum int
 )
+
+func OpenMsgLog(o bool) {
+	MsgLog = o
+}

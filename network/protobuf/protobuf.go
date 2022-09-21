@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"github.com/trist725/myleaf/conf"
 	"math"
 	"reflect"
 
@@ -119,6 +120,9 @@ func (p *Processor) Route(msg interface{}, userData interface{}) error {
 	id, ok := p.msgID[msgType]
 	if !ok {
 		return fmt.Errorf("message %s not registered", msgType)
+	}
+	if conf.MsgLog {
+		log.Debug("recv & route %s", msgType.Name())
 	}
 	i := p.msgInfo[id]
 	if i.msgHandler != nil {

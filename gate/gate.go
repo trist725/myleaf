@@ -1,6 +1,7 @@
 package gate
 
 import (
+	"github.com/trist725/myleaf/conf"
 	"net"
 	"reflect"
 	"time"
@@ -152,6 +153,9 @@ func (a *agent) WriteMsg(msg interface{}) {
 		if err != nil {
 			log.Error("marshal message %v error: %v", reflect.TypeOf(msg), err)
 			return
+		}
+		if conf.MsgLog {
+			log.Debug("send %s", reflect.TypeOf(msg).Name())
 		}
 		err = a.conn.WriteMsg(data...)
 		if err != nil {
