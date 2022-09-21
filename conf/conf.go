@@ -7,7 +7,7 @@ var (
 	LogLevel string
 	LogPath  string
 	LogFlag  int
-	MsgLog   = true // 收发消息日志开关
+	MsgLog   = false // 收发消息日志开关
 
 	// console
 	ConsolePort   int

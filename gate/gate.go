@@ -155,7 +155,7 @@ func (a *agent) WriteMsg(msg interface{}) {
 			return
 		}
 		if conf.MsgLog {
-			log.Debug("send %s", reflect.TypeOf(msg).Name())
+			log.Debug("send %T", msg)
 		}
 		err = a.conn.WriteMsg(data...)
 		if err != nil {

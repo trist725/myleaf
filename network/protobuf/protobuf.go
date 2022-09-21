@@ -122,7 +122,7 @@ func (p *Processor) Route(msg interface{}, userData interface{}) error {
 		return fmt.Errorf("message %s not registered", msgType)
 	}
 	if conf.MsgLog {
-		log.Debug("recv & route %s", msgType.Name())
+		log.Debug("recv & route %T", msg)
 	}
 	i := p.msgInfo[id]
 	if i.msgHandler != nil {
