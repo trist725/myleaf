@@ -172,10 +172,12 @@ func (a *agent) RemoteAddr() net.Addr {
 	return a.conn.RemoteAddr()
 }
 
+// Close 不能保证一定释放连接，但是它能保证一定尽可能的发送调用 Close 之前发送的消息（避免消息丢失）
 func (a *agent) Close() {
 	a.conn.Close()
 }
 
+// Destroy 方法不能保证调用 Destroy 之前发送的消息一定被发送，但是它能保证连接一定被释放
 func (a *agent) Destroy() {
 	a.conn.Destroy()
 }
