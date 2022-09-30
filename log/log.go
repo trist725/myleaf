@@ -4,9 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"github.com/trist725/mgsu/util"
+	"github.com/trist725/myleaf/conf"
 	"log"
 	"os"
 	"path"
+	"reflect"
 	"strings"
 	"time"
 )
@@ -132,6 +134,13 @@ func Export(logger *Logger) {
 	if logger != nil {
 		gLogger = logger
 	}
+}
+
+func DebugMsg(t reflect.Type, format string, a ...interface{}) {
+	if !conf.MsgLog || conf.InBlackList(t) {
+		return
+	}
+	gLogger.doPrintf(debugLevel, printDebugLevel, format, a...)
 }
 
 func Debug(format string, a ...interface{}) {
