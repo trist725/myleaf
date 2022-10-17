@@ -71,7 +71,7 @@ func (tcpConn *TCPConn) Close() {
 	tcpConn.closeFlag = true
 }
 
-func (tcpConn *TCPConn) IsClose() bool {
+func (tcpConn *TCPConn) IsClosed() bool {
 	tcpConn.Lock()
 	defer tcpConn.Unlock()
 	return tcpConn.closeFlag

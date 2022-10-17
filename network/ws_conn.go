@@ -73,7 +73,7 @@ func (wsConn *WSConn) Close() {
 	wsConn.closeFlag = true
 }
 
-func (wsConn *WSConn) IsClose() bool {
+func (wsConn *WSConn) IsClosed() bool {
 	wsConn.Lock()
 	defer wsConn.Unlock()
 	return wsConn.closeFlag

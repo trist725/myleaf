@@ -10,6 +10,6 @@ type Conn interface {
 	LocalAddr() net.Addr
 	RemoteAddr() net.Addr
 	Close()
-	IsClose() bool
+	IsClosed() bool
 	Destroy()
 }
