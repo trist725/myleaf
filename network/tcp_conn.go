@@ -71,6 +71,12 @@ func (tcpConn *TCPConn) Close() {
 	tcpConn.closeFlag = true
 }
 
+func (tcpConn *TCPConn) IsClose() bool {
+	tcpConn.Lock()
+	defer tcpConn.Unlock()
+	return tcpConn.closeFlag
+}
+
 func (tcpConn *TCPConn) doWrite(b []byte) {
 	if len(tcpConn.writeChan) == cap(tcpConn.writeChan) {
 		log.Debug("close conn: channel full")

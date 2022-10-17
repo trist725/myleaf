@@ -73,6 +73,12 @@ func (wsConn *WSConn) Close() {
 	wsConn.closeFlag = true
 }
 
+func (wsConn *WSConn) IsClose() bool {
+	wsConn.Lock()
+	defer wsConn.Unlock()
+	return wsConn.closeFlag
+}
+
 func (wsConn *WSConn) doWrite(b []byte) {
 	if len(wsConn.writeChan) == cap(wsConn.writeChan) {
 		log.Debug("close conn: channel full")
