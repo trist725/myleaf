@@ -181,7 +181,7 @@ func (a *agent) Destroy() {
 	a.conn.Destroy()
 }
 
-func (a *agent) IsClose() bool {
+func (a *agent) IsClosed() bool {
 	return a.conn.IsClose()
 }
 
