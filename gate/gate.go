@@ -181,6 +181,10 @@ func (a *agent) Destroy() {
 	a.conn.Destroy()
 }
 
+func (a *agent) IsClose() bool {
+	return a.conn.IsClose()
+}
+
 func (a *agent) UserData() interface{} {
 	return a.userData
 }

@@ -9,6 +9,7 @@ type Agent interface {
 	LocalAddr() net.Addr
 	RemoteAddr() net.Addr
 	Close()
+	IsClose() bool
 	Destroy()
 	UserData() interface{}
 	SetUserData(data interface{})

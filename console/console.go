@@ -81,3 +81,7 @@ func (a *Agent) Run() {
 }
 
 func (a *Agent) OnClose() {}
+
+func (a *Agent) IsClose() bool {
+	return a.conn.IsClose()
+}
