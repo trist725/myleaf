@@ -126,3 +126,9 @@ func (server *TCPServer) Close() {
 	server.mutexConns.Unlock()
 	server.wgConns.Wait()
 }
+
+func (server *TCPServer) ConnCount() int {
+	server.mutexConns.Lock()
+	defer server.mutexConns.Unlock()
+	return len(server.conns)
+}

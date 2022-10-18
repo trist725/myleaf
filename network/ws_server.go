@@ -152,3 +152,9 @@ func (server *WSServer) Close() {
 
 	server.handler.wg.Wait()
 }
+
+func (server *WSServer) ConnCount() int {
+	server.handler.mutexConns.Lock()
+	defer server.handler.mutexConns.Unlock()
+	return len(server.handler.conns)
+}
