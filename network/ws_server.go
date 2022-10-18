@@ -62,6 +62,7 @@ func (handler *WSHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	handler.conns[conn] = struct{}{}
+	log.DebugMsg(nil, "new ws connection: %s, current:[%d]", conn.RemoteAddr().String(), len(handler.conns))
 	handler.mutexConns.Unlock()
 
 	wsConn := newWSConn(conn, handler.pendingWriteNum, handler.maxMsgLen)
@@ -71,6 +72,7 @@ func (handler *WSHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// cleanup
 	wsConn.Close()
 	handler.mutexConns.Lock()
+	log.DebugMsg(nil, "delete ws connection: %s, current:[%d]", conn.RemoteAddr().String(), len(handler.conns))
 	delete(handler.conns, conn)
 	handler.mutexConns.Unlock()
 	agent.OnClose()
