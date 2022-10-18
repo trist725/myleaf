@@ -92,6 +92,7 @@ func (server *TCPServer) run() {
 			continue
 		}
 		server.conns[conn] = struct{}{}
+		log.DebugMsg(nil, "new tcp connection: %s, current:[%d]", conn.RemoteAddr().String(), len(server.conns))
 		server.mutexConns.Unlock()
 
 		server.wgConns.Add(1)
@@ -99,14 +100,13 @@ func (server *TCPServer) run() {
 		tcpConn := newTCPConn(conn, server.PendingWriteNum, server.msgParser)
 		agent := server.NewAgent(tcpConn)
 		go func() {
-			log.DebugMsg(nil, "new tcp connection: %s, current:[%d]", conn.RemoteAddr().String(), server.ConnCount())
 			agent.Run()
 
 			// cleanup
 			tcpConn.Close()
 			server.mutexConns.Lock()
 			delete(server.conns, conn)
-			log.DebugMsg(nil, "delete tcp connection: %s, current:[%d]", conn.RemoteAddr().String(), server.ConnCount())
+			log.DebugMsg(nil, "delete tcp connection: %s, current:[%d]", conn.RemoteAddr().String(), len(server.conns))
 			server.mutexConns.Unlock()
 			agent.OnClose()
 
