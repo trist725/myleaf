@@ -1,13 +1,14 @@
 package leaf
 
 import (
+	"os"
+	"os/signal"
+
 	"github.com/trist725/myleaf/cluster"
 	"github.com/trist725/myleaf/conf"
 	"github.com/trist725/myleaf/console"
 	"github.com/trist725/myleaf/log"
 	"github.com/trist725/myleaf/module"
-	"os"
-	"os/signal"
 )
 
 func Run(mods ...module.Module) {
@@ -21,7 +22,7 @@ func Run(mods ...module.Module) {
 		defer logger.Close()
 	}
 
-	log.Release("Leaf %v starting up", version)
+	log.Release("MyLeaf %v starting up", version)
 
 	// module
 	for i := 0; i < len(mods); i++ {
